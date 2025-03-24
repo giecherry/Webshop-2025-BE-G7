@@ -32,11 +32,21 @@ router.get("/", async (req, res) => {
 // Create product (admin only)
 router.post("/", adminAuth, async (req, res) => {
   try {
-    const product = new Product(req.body);
+    const {name, price, description, stock } = req.body;
+    if (!name || !price === undefined) {
+      return res.status(400).json({ error: "Namn och pris behövs" });
+    }
+    const product = new Product({
+      name,
+      price,
+      description: description || "",
+      stock: stock || 0
+    });
     await product.save();
-    res.status(201).json(product);
+    res.status(201).json({message: "Produkt skapad", product});
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    console.error("error");
+    res.status(400).json({ error: "Internal server error" });
   }
 });
 
