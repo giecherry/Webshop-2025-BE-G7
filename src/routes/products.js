@@ -17,12 +17,15 @@ const productsJSON = JSON.parse(
 );
 
 // Get all products
-router.get("/", async (req, res) => {
+router.get("/products", async (req, res) => {
   try {
-    //! DONT USE IN PRODUCTION get products from json file
-    res.json(productsJSON);
-    return;
+    const products = await Product.find();
+    if (!products || products.length === 0)  {
+      return res.json(productsJSON);
+    }
+    return res.json(products);
   } catch (error) {
+    console.warn("Error in getting products", error)
     res.status(500).json({ error: error.message });
   }
 });
@@ -30,10 +33,10 @@ router.get("/", async (req, res) => {
 //TODO Get single product
 
 // Create product (admin only)
-router.post("/", adminAuth, async (req, res) => {
+router.post("/products", adminAuth, async (req, res) => {
   try {
-    const {name, price, description, stock } = req.body;
-    if (!name || !price === undefined) {
+    const { name, price, description, stock } = req.body;
+    if (!name || price === undefined) {
       return res.status(400).json({ error: "Namn och pris behövs" });
     }
     const product = new Product({
@@ -43,10 +46,10 @@ router.post("/", adminAuth, async (req, res) => {
       stock: stock || 0
     });
     await product.save();
-    res.status(201).json({message: "Produkt skapad", product});
+    res.status(201).json({ message: "Produkt skapad", product });
   } catch (error) {
     console.error("error");
-    res.status(400).json({ error: "Internal server error" });
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
