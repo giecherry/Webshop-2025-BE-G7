@@ -30,7 +30,24 @@ router.get("/products", async (req, res) => {
   }
 });
 
-//TODO Get single product
+// Get single product
+router.get("/products/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    let product = await Product.findById(id);
+    if (!product) {
+      product = productsJSON.find((product) => product._id === id);
+      if (!product) {
+        return res.status(404).json({ error: "Produkt hittades inte" });
+      }
+    }
+    return res.json(product);
+  } catch (error) {
+    console.error("Error in getting product by ID:", error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 
 // Create product (admin only)
 router.post("/products", adminAuth, async (req, res) => {
@@ -53,8 +70,40 @@ router.post("/products", adminAuth, async (req, res) => {
   }
 });
 
-//TODO Update product (admin only)
+//Update product (admin only)
+router.put("/products/:id",adminAuth, async (req, res) => {
+  const {id} = req.params
+  const body = req.body
+  const productData = {
+      ...body,
+  }
+  delete productData._id 
+  try {
+      const product = await Product.findByIdAndUpdate(id, {$set: productData}, {new: true })
+      if(!product) {
+          throw new Error("Product not found")
+      }
+      res.json(product)
+  } catch(error) {
+      console.warn("Error in updating product", error)
+      res.status(404).json({
+          error: "Product not found"
+      })
+  }
+} )
 
-//TODO Delete product (admin only)
+//Delete product (admin only)
+router.delete("/products/:id",adminAuth, async (req, res) => {
+  const {id} = req.params
+  try {
+      await Product.findByIdAndDelete(id)
+      return res.status(204).json()
+  } catch(error) {
+      console.warn("Error in getting product", error)
+      res.status(404).json({
+          error: "Product not found"
+      })
+  }
+})
 
 export default router;
