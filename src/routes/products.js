@@ -55,11 +55,18 @@ router.get("/products/:id", async (req, res) => {
 //!Modify to require a category and picture
 router.post("/products", adminAuth, async (req, res) => {
   try {
-    const { name, price, description, stock, category } = req.body;
+    const { name, price, description, stock, category, imageUrl } = req.body;
     
+    // Validate required fields
     if (!name || price === undefined) {
       return res.status(400).json({ error: "Namn och pris behövs" });
-    }    
+    }
+    
+
+    
+    if (!imageUrl) {
+      return res.status(400).json({ error: "Bild URL är obligatorisk" });
+    }
     
     // Create product object
     const productData = {
@@ -67,6 +74,7 @@ router.post("/products", adminAuth, async (req, res) => {
       price,
       description: description || "",
       stock: stock || 0,
+      imageUrl,
     };
     
     // Only add category if provided
