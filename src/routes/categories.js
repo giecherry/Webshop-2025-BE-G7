@@ -57,7 +57,7 @@ router.delete("/categories/:id", adminAuth, async (req, res) => {
     const productsInCategory = await Product.find({ category: categoryId });
     if (productsInCategory.length > 0) {
       console.warn(
-        `Warning: This category has ${associatedProducts.length} products.`
+        `Warning: This category has ${productsInCategory.length} products.`
       );
     await Product.updateMany(
         { category: categoryId },
