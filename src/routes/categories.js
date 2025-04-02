@@ -68,7 +68,7 @@ router.delete("/categories/:id", adminAuth, async (req, res) => {
       return res.status(404).json({ error: "Category not found" });
     }
 
-    res.json({
+    res.status(200).json({
       message: "Category deleted successfully",
       warning: productsInCategory.length > 0? `Warning: ${productsInCategory.length} products had their category set to null.`
         : undefined,
