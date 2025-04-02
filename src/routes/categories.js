@@ -5,6 +5,16 @@ import { adminAuth } from "../middleware/auth.js";
 const router = express.Router();
 
 // Get all categories
+router.get("/categories", async (req, res) => {
+  try {
+    const categories = await Category.find();
+    res.json(categories);
+  } catch (error) {
+    console.error("Error in getting categories:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 
 // Create a new category (Admin only)
 router.post("/categories", adminAuth, async (req, res) => {
@@ -23,7 +33,20 @@ router.post("/categories", adminAuth, async (req, res) => {
 });
 
 // Update a category (Admin only)
-
+router.put("/categories/:id", adminAuth, async (req, res) => {
+  const { id } = req.params;
+  const { name } = req.body;
+  try {
+    const category = await Category.findByIdAndUpdate(id, { name }, { new: true });
+    if (!category) {
+      return res.status(404).json({ error: "Kategori hittades inte" });
+    }
+    res.json(category);
+  } catch (error) {
+    console.error("Error in updating category:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
 
 // Delete a category (Admin only)
 router.delete("/categories/:id", adminAuth, async (req, res) => {
