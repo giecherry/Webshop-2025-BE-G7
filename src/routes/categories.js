@@ -21,14 +21,15 @@ router.post("/categories", adminAuth, async (req, res) => {
   try {
     const { name, description } = req.body;
     if (!name || !description) {
-      return res.status(400).json({ error: "Category name and description needed" });
+      return res.status(400).json({ error: "Category name and description required" });
     }
     
     const category = new Category({ name, description });
     await category.save();
-    res.status(201).json(category);
+    res.status(201).json({message: "Category created successfully.",category});
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    console.error("Error in creating category:", error);
+    res.status(400).json({ error: "Internal server error"});
   }
 });
 
