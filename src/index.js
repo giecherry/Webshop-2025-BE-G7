@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import authRoutes from './routes/auth.js';
 import productRoutes from './routes/products.js';
+import categoryRoutes from './routes/categories.js';
 
 dotenv.config();
 
@@ -30,6 +31,12 @@ app.get('/api', (req, res) => {
         "POST /api/products": "Create a new product (Admin only)",
         "PUT /api/products/:id": "Update a product (Admin only)",
         "DELETE /api/products/:id": "Delete a product (Admin only)"
+      },
+      categories: {
+        "GET /api/categories": "Get all categories",
+        "POST /api/categories": "Create a new category (Admin only)",
+        "PUT /api/categories/:id": "Update a category (Admin only)",
+        "DELETE /api/categories/:id": "Delete a category (Admin only)"
       }
     },
     authentication: "Use Bearer token in Authorization header for protected routes"
@@ -39,6 +46,8 @@ app.get('/api', (req, res) => {
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api', productRoutes);
+app.use('/api', categoryRoutes);
+
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/hakim-livs')

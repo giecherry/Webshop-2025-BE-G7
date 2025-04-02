@@ -1,6 +1,7 @@
 import express from "express";
 import Product from "../models/Product.js";
 import { adminAuth } from "../middleware/auth.js";
+import Category from "../models/Category.js";
 import { readFileSync } from "fs";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
@@ -17,9 +18,10 @@ const productsJSON = JSON.parse(
 );
 
 // Get all products
+//!Modify this part to populate the category
 router.get("/products", async (req, res) => {
   try {
-    const products = await Product.find();
+    const products = await Product.find().populate('category');
     if (!products || products.length === 0)  {
       return res.json(productsJSON);
     }
@@ -50,27 +52,52 @@ router.get("/products/:id", async (req, res) => {
 
 
 // Create product (admin only)
+//!Modify to require a category and picture
 router.post("/products", adminAuth, async (req, res) => {
   try {
-    const { name, price, description, stock } = req.body;
+    const { name, price, description, stock, category, imageUrl } = req.body;
+    
+    // Validate required fields
     if (!name || price === undefined) {
       return res.status(400).json({ error: "Namn och pris behövs" });
     }
-    const product = new Product({
+    
+
+    
+    if (!imageUrl) {
+      return res.status(400).json({ error: "Bild URL är obligatorisk" });
+    }
+    
+    // Create product object
+    const productData = {
       name,
       price,
       description: description || "",
-      stock: stock || 0
-    });
+      stock: stock || 0,
+      imageUrl,
+    };
+    
+    // Only add category if provided
+    if (category) {
+      // Verify that the category exists
+      const categoryExists = await Category.findById(category);
+      if (!categoryExists) {
+        return res.status(400).json({ error: "Angiven kategori finns inte" });
+      }
+      productData.category = category;
+    }
+    
+    const product = new Product(productData);
     await product.save();
     res.status(201).json({ message: "Produkt skapad", product });
   } catch (error) {
-    console.error("error");
+    console.error("Error creating product:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 });
 
 //Update product (admin only)
+//!Modify so that you can update the category or picture
 router.put("/products/:id",adminAuth, async (req, res) => {
   const {id} = req.params
   const body = req.body
@@ -79,11 +106,24 @@ router.put("/products/:id",adminAuth, async (req, res) => {
   }
   delete productData._id 
   try {
-      const product = await Product.findByIdAndUpdate(id, {$set: productData}, {new: true })
-      if(!product) {
-          throw new Error("Product not found")
+    // Verifiera att kategorin finns om den ingår i uppdateringen
+    if (productData.category) {
+      const categoryExists = await Category.findById(productData.category);
+      if (!categoryExists) {
+        return res.status(400).json({ error: "Angiven kategori finns inte" });
       }
-      res.json(product)
+    }
+    
+    const product = await Product.findByIdAndUpdate(
+      id, 
+      {$set: productData}, 
+      {new: true}
+    ).populate('category');
+    
+    if(!product) {
+      throw new Error("Product not found")
+    }
+    res.json(product)
   } catch(error) {
       console.warn("Error in updating product", error)
       res.status(404).json({
