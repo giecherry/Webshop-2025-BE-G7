@@ -51,11 +51,31 @@ router.put("/categories/:id", adminAuth, async (req, res) => {
 // Delete a category (Admin only)
 router.delete("/categories/:id", adminAuth, async (req, res) => {
   try {
-    const category = await Category.findByIdAndDelete(req.params.id);
-    if (!category) return res.status(404).json({ error: "Category not found" });
-    res.json({ message: "Category deleted" });
+    const categoryId = req.params.id;
+    const productsInCategory = await Product.find({ category: categoryId });
+    if (productsInCategory.length > 0) {
+      console.warn(
+        `Warning: This category has ${associatedProducts.length} products.`
+      );
+    await Product.updateMany(
+        { category: categoryId },
+        { $set: { category: null } }
+      );
+    }
+
+    const category = await Category.findByIdAndDelete(categoryId);
+    if (!category) {
+      return res.status(404).json({ error: "Category not found" });
+    }
+
+    res.json({
+      message: "Category deleted successfully",
+      warning: productsInCategory.length > 0? `Warning: ${productsInCategory.length} products had their category set to null.`
+        : undefined,
+    });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error("Error in deleting category:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
