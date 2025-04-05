@@ -18,7 +18,6 @@ const productsJSON = JSON.parse(
 );
 
 // Get all products
-//!Modify this part to populate the category
 router.get("/products", async (req, res) => {
   try {
     const products = await Product.find().populate('category');
@@ -52,7 +51,6 @@ router.get("/products/:id", async (req, res) => {
 
 
 // Create product (admin only)
-//!Modify to require a category and picture
 router.post("/products", adminAuth, async (req, res) => {
   try {
     const { name, price, description, stock, category, imageUrl } = req.body;
@@ -97,7 +95,6 @@ router.post("/products", adminAuth, async (req, res) => {
 });
 
 //Update product (admin only)
-//!Modify so that you can update the category or picture
 router.put("/products/:id",adminAuth, async (req, res) => {
   const {id} = req.params
   const body = req.body
