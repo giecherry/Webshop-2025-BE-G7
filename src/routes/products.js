@@ -1,6 +1,6 @@
 import express from "express";
 import Product from "../models/Product.js";
-import { adminAuth } from "../middleware/auth.js";
+import { adminAuth, auth } from "../middleware/auth.js";
 import Category from "../models/Category.js";
 import { readFileSync } from "fs";
 import { fileURLToPath } from "url";
@@ -142,5 +142,41 @@ router.delete("/products/:id",adminAuth, async (req, res) => {
       })
   }
 })
+
+// Update stock for a product (User making a purchase)
+router.put('/products/:id/stock', auth, async (req, res) => {
+  const { id } = req.params; 
+  const { quantity } = req.body; 
+
+  if (!quantity || quantity <= 0) {
+    return res.status(400).json({ message: 'Invalid quantity provided' });
+  }
+
+  try {
+    const product = await Product.findById(id);
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+    if (product.stock < quantity) {
+      return res.status(400).json({
+        message: `Not enough stock. Available stock: ${product.stock}`,
+      });
+    }
+    product.stock -= quantity;
+    await product.save();
+
+    res.status(200).json({
+      message: 'Stock updated successfully.',
+      updatedStock: product.stock,
+    });
+  } catch (error) {
+    console.error('Error updating stock:', error);
+    res.status(500).json({
+      message: 'Something went wrong while updating the stock.',
+      error: error.message,
+    });
+  }
+});
+
 
 export default router;
