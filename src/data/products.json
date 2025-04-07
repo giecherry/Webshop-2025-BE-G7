@@ -1,23 +1,268 @@
 [
+    {     
+        "name": "camel milk",
+        "price": 5.99,
+        "description": "camel milk, 250g package.",
+        "stock": 45
+    },
     {
-        "_id": "1",
+        "_id": "64e74ab2c382e1234a56789a",
         "name": "Banana",
+        "category": "64e74ab2c382e1234a56789a",
         "price": 0.29,
         "description": "A banana is an edible fruit – botanically a berry – produced by several kinds of large herbaceous flowering plants in the genus Musa.",
-        "stock": 100
+        "stock": 30
     },
     {
-        "_id": "2",
+        "_id": "64e74ab2c382e1234a56789b",
         "name": "Apple",
-        "price": 0.59,
+        "price": 0.59, 
         "description": "An apple is an edible fruit produced by an apple tree.",
-        "stock": 150
+        "stock": 10
     },
     {
-        "_id": "3",
+        "_id": "64e74ab2c382e1234a56789c",
         "name": "Orange",
         "price": 0.49,
         "description": "The orange is the fruit of various citrus species in the family Rutaceae.",
         "stock": 200
+    },
+    {
+        "_id": "64e74ab2c382e1234a56789d",
+        "name": "Milk",
+        "price": 1.99,
+        "description": "Fresh whole milk from local dairy farms.",
+        "stock": 50
+    },
+    {
+        "_id": "64e74ab2c382e1234a56789e",
+        "name": "Bread",
+        "price": 2.49,
+        "description": "Freshly baked whole wheat bread.",
+        "stock": 30
+    },
+    {
+        "_id": "64e74ab2c382e1234a56789f",
+        "name": "Eggs",
+        "price": 3.99,
+        "description": "Farm fresh eggs, dozen pack.",
+        "stock": 40
+    },
+    {
+        "_id": "64e74ab2c382e1234a567900",
+        "name": "Cheese",
+        "price": 4.99,
+        "description": "Aged cheddar cheese.",
+        "stock": 25
+    },
+    {
+        "_id": "64e74ab2c382e1234a567901",
+        "name": "Tomatoes",
+        "price": 0.99,
+        "description": "Fresh red tomatoes.",
+        "stock": 75
+    },
+    {
+        "_id": "64e74ab2c382e1234a567902",
+        "name": "Potatoes",
+        "price": 0.79,
+        "description": "Fresh russet potatoes.",
+        "stock": 120
+    },
+    {
+        "_id": "64e74ab2c382e1234a567903",
+        "name": "Onions",
+        "price": 0.69,
+        "description": "Yellow onions.",
+        "stock": 80
+    },
+    {
+        "_id": "64e74ab2c382e1234a567904",
+        "name": "Chicken",
+        "price": 7.99,
+        "description": "Fresh whole chicken.",
+        "stock": 20
+    },
+    {
+        "_id": "64e74ab2c382e1234a567905",
+        "name": "Rice",
+        "price": 3.49,
+        "description": "Long grain white rice, 1kg bag.",
+        "stock": 60
+    },
+    {
+        "_id": "64e74ab2c382e1234a567906",
+        "name": "Pasta",
+        "price": 1.99,
+        "description": "Spaghetti pasta, 500g pack.",
+        "stock": 70
+    },
+    {
+        "_id": "64e74ab2c382e1234a567907",
+        "name": "Coffee",
+        "price": 5.99,
+        "description": "Ground coffee, medium roast.",
+        "stock": 45
+    },
+    {
+        "_id": "64e74ab2c382e1234a567908",
+        "name": "Tea",
+        "price": 3.99,
+        "description": "Black tea, 50 bags.",
+        "stock": 55
+    },
+    {
+        "_id": "64e74ab2c382e1234a567909",
+        "name": "Sugar",
+        "price": 2.49,
+        "description": "White granulated sugar, 1kg.",
+        "stock": 90
+    },
+    {
+        "_id": "64e74ab2c382e1234a56790a",
+        "name": "Salt",
+        "price": 1.29,
+        "description": "Table salt, 500g.",
+        "stock": 100
+    },
+    {
+        "_id": "64e74ab2c382e1234a56790b",
+        "name": "Pepper",
+        "price": 2.99,
+        "description": "Ground black pepper.",
+        "stock": 85
+    },
+    {
+        "_id": "64e74ab2c382e1234a56790c",
+        "name": "Butter",
+        "price": 3.99,
+        "description": "Unsalted butter, 250g.",
+        "stock": 40
+    },
+    {
+        "_id": "64e74ab2c382e1234a56790d",
+        "name": "Yogurt",
+        "price": 2.99,
+        "description": "Plain yogurt, 500g.",
+        "stock": 35
+    },
+    {
+        "_id": "64e74ab2c382e1234a56790e",
+        "name": "Carrots",
+        "price": 0.89,
+        "description": "Fresh orange carrots.",
+        "stock": 95
+    },
+    {
+        "_id": "64e74ab2c382e1234a56790f",
+        "name": "Cucumber",
+        "price": 0.99,
+        "description": "Fresh green cucumber.",
+        "stock": 65
+    },
+    {
+        "_id": "64e74ab2c382e1234a567910",
+        "name": "Salmon",
+        "price": 12.99,
+        "description": "Fresh Atlantic salmon fillet.",
+        "stock": 25
+    },
+    {
+        "_id": "64e74ab2c382e1234a567911",
+        "name": "Chocolate",
+        "price": 2.99,
+        "description": "Dark chocolate bar, 100g.",
+        "stock": 70
+    },
+    {
+        "_id": "64e74ab2c382e1234a567912",
+        "name": "Ice Cream",
+        "price": 4.99,
+        "description": "Vanilla ice cream, 1L container.",
+        "stock": 30
+    },
+    {
+        "_id": "64e74ab2c382e1234a567913",
+        "name": "Cereal",
+        "price": 3.99,
+        "description": "Whole grain breakfast cereal.",
+        "stock": 45
+    },
+    {
+        "_id": "64e74ab2c382e1234a567914",
+        "name": "Juice",
+        "price": 2.99,
+        "description": "Fresh orange juice, 1L.",
+        "stock": 40
+    },
+    {
+        "_id": "64e74ab2c382e1234a567915",
+        "name": "Chips",
+        "price": 1.99,
+        "description": "Classic potato chips, 200g bag.",
+        "stock": 80
+    },
+    {
+        "_id": "64e74ab2c382e1234a567916",
+        "name": "Honey",
+        "price": 5.99,
+        "description": "Pure natural honey, 500g.",
+        "stock": 35
+    },
+    {
+        "_id": "64e74ab2c382e1234a567917",
+        "name": "Avocado",
+        "price": 1.49,
+        "description": "Fresh ripe avocados.",
+        "stock": 50
+    },
+    {
+        "_id": "64e74ab2c382e1234a567918",
+        "name": "Mushrooms",
+        "price": 2.49,
+        "description": "Fresh white mushrooms, 250g pack.",
+        "stock": 45
+    },
+    {
+        "_id": "64e74ab2c382e1234a567919",
+        "name": "Garlic",
+        "price": 0.99,
+        "description": "Fresh garlic bulbs.",
+        "stock": 75
+    },
+    {
+        "_id": "64e74ab2c382e1234a56791a",
+        "name": "Failing Product 1",
+        "price": -5.99,
+        "description": "This product should fail validation.",
+        "stock": 10
+    },
+    {
+        "_id": "64e74ab2c382e1234a56791b",
+        "price": 9.99,
+        "description": "This product is missing the required name field.",
+        "stock": 15
+    },
+    {
+        "_id": "invalid_id_format",
+        "name": "Failing Product 3",
+        "price": 7.99,
+        "description": "This product has an invalid _id format.",
+        "stock": 20
+    },
+    {
+        "_id": "64e74ab2c382e1234a56791c",
+        "name": "Failing Product 4",
+        "price": "not_a_number",
+        "description": "This product has an invalid price type.",
+        "stock": 25
+    },
+    {
+        "_id": "64e74ab2c382e1234a56791d",
+        "name": "Failing Product 5",
+        "price": 8.99,
+        "description": "This product has an invalid category reference.",
+        "stock": 30,
+        "category": "invalid_category_id"
     }
 ]

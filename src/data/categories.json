@@ -1,0 +1,14 @@
+[
+  {
+    "name": "Fruits",
+    "description": "Fresh fruits from local and international suppliers"
+  },
+  {
+    "name": "Vegetables",
+    "description": "Fresh vegetables for your daily needs"
+  },
+  {
+    "name": "Dairy",
+    "description": "Milk, cheese, and other dairy products"
+  }
+] 
