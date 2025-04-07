@@ -14,7 +14,7 @@ router.get(
   async (req, res) => {
     try {
       const orders = await Order.find()
-        .populate("user")
+        .populate("user", "username _id")
         .populate("items.product");
       if (orders.length === 0) {
         return res.status(404).json({
@@ -45,7 +45,7 @@ router.get(
     const { id } = req.params;
     try {
       const order = await Order.findById(id)
-        .populate("user")
+        .populate("user", "username _id")
         .populate("items.product");
       if (!order) {
         return res.status(404).json({
@@ -153,7 +153,7 @@ router.get(
     const { userId } = req.params;
     try {
       if (
-        req.user._id.toString() !== userId &&
+        req.user.id.toString() !== userId &&
         !req.user.isAdmin
       ) {
         return res.status(403).json({
@@ -161,9 +161,7 @@ router.get(
             "Access denied: You are not authorized to view orders for this user.",
         });
       }
-      const orders = await Order.find({
-        user: userId,
-      }).populate("items.product");
+      const orders = await Order.find({user: userId}).populate("items.product");
       if (orders.length === 0) {
         return res.status(404).json({
           error: "No orders found for this user.",
