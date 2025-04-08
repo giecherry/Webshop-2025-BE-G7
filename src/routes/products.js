@@ -1,6 +1,6 @@
 import express from "express";
 import Product from "../models/Product.js";
-import { adminAuth } from "../middleware/auth.js";
+import { adminAuth, auth } from "../middleware/auth.js";
 import Category from "../models/Category.js";
 import { readFileSync } from "fs";
 import { fileURLToPath } from "url";
@@ -18,7 +18,6 @@ const productsJSON = JSON.parse(
 );
 
 // Get all products
-//!Modify this part to populate the category
 router.get("/products", async (req, res) => {
   try {
     const products = await Product.find().populate('category');
@@ -32,6 +31,29 @@ router.get("/products", async (req, res) => {
   }
 });
 
+// Get products by category name or category ID
+router.get("/products/category/:category", async (req, res) => {
+  const { category } = req.params;
+
+  try {
+    let categoryQuery;
+    if (category.match(/^[0-9a-fA-F]{24}$/)) {
+      categoryQuery = await Category.findById(category);
+    } else {
+      categoryQuery = await Category.findOne({ name: category });
+    }
+
+    if (!categoryQuery) {
+      return res.status(404).json({ error: `Kategori '${category}' hittades inte` });
+    }
+    const products = await Product.find({ category: categoryQuery._id }).populate('category');
+
+    res.json(products);
+  } catch (error) {
+    console.error("Error in getting products by category:", error);
+    res.status(500).json({ error: "Internt serverfel" });
+  }
+});
 // Get single product
 router.get("/products/:id", async (req, res) => {
   const { id } = req.params;
@@ -52,7 +74,6 @@ router.get("/products/:id", async (req, res) => {
 
 
 // Create product (admin only)
-//!Modify to require a category and picture
 router.post("/products", adminAuth, async (req, res) => {
   try {
     const { name, price, description, stock, category, imageUrl } = req.body;
@@ -97,7 +118,6 @@ router.post("/products", adminAuth, async (req, res) => {
 });
 
 //Update product (admin only)
-//!Modify so that you can update the category or picture
 router.put("/products/:id",adminAuth, async (req, res) => {
   const {id} = req.params
   const body = req.body
@@ -145,5 +165,41 @@ router.delete("/products/:id",adminAuth, async (req, res) => {
       })
   }
 })
+
+// Update stock for a product (User making a purchase)
+router.put('/products/:id/stock', auth, async (req, res) => {
+  const { id } = req.params; 
+  const { quantity } = req.body; 
+
+  if (!quantity || quantity <= 0) {
+    return res.status(400).json({ message: 'Invalid quantity provided' });
+  }
+
+  try {
+    const product = await Product.findById(id);
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+    if (product.stock < quantity) {
+      return res.status(400).json({
+        message: `Not enough stock. Available stock: ${product.stock}`,
+      });
+    }
+    product.stock -= quantity;
+    await product.save();
+
+    res.status(200).json({
+      message: 'Stock updated successfully.',
+      updatedStock: product.stock,
+    });
+  } catch (error) {
+    console.error('Error updating stock:', error);
+    res.status(500).json({
+      message: 'Something went wrong while updating the stock.',
+      error: error.message,
+    });
+  }
+});
+
 
 export default router;
