@@ -1,0 +1,16 @@
+[
+  {
+    "user": "userId",
+    "items": [
+      {
+        "product": "productId1",
+        "quantity": 2
+      },
+      {
+        "product": "productId2",
+        "quantity": 1
+      }
+    ],
+    "totalPrice": 10.99
+  }
+] 

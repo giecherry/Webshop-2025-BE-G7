@@ -1,0 +1,27 @@
+[
+  {
+    "username": "Hakim",
+    "password": "$2a$10$someHashedPasswordString",
+    "isAdmin": true
+  },
+  {
+    "username": "customer",
+    "password": "$2a$10$someOtherHashedPasswordString",
+    "isAdmin": false
+  },
+  {
+    "username": "customer2",
+    "password": "$2a$10$someHashedPasswordString123",
+    "isAdmin": false
+  },
+  {
+    "username": "customer3", 
+    "password": "$2a$10$someHashedPasswordString456",
+    "isAdmin": false
+  },
+  {
+    "username": "customer4",
+    "password": "$2a$10$someHashedPasswordString789", 
+    "isAdmin": false
+  }
+] 
