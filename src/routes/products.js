@@ -31,6 +31,29 @@ router.get("/products", async (req, res) => {
   }
 });
 
+// Get products by category name or category ID
+router.get("/products/category/:category", async (req, res) => {
+  const { category } = req.params;
+
+  try {
+    let categoryQuery;
+    if (category.match(/^[0-9a-fA-F]{24}$/)) {
+      categoryQuery = await Category.findById(category);
+    } else {
+      categoryQuery = await Category.findOne({ name: category });
+    }
+
+    if (!categoryQuery) {
+      return res.status(404).json({ error: `Kategori '${category}' hittades inte` });
+    }
+    const products = await Product.find({ category: categoryQuery._id }).populate('category');
+
+    res.json(products);
+  } catch (error) {
+    console.error("Error in getting products by category:", error);
+    res.status(500).json({ error: "Internt serverfel" });
+  }
+});
 // Get single product
 router.get("/products/:id", async (req, res) => {
   const { id } = req.params;
