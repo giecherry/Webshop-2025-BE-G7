@@ -37,6 +37,7 @@ router.get("/products/category/:category", async (req, res) => {
 
   try {
     let categoryQuery;
+
     if (category.match(/^[0-9a-fA-F]{24}$/)) {
       categoryQuery = await Category.findById(category);
     } else {
@@ -48,7 +49,18 @@ router.get("/products/category/:category", async (req, res) => {
     }
     const products = await Product.find({ category: categoryQuery._id }).populate('category');
 
-    res.json(products);
+    if (!products || products.length === 0) {
+     
+      const fallbackProducts = productsJSON.filter(p => p.category === categoryQuery._id.toString());
+
+      if (fallbackProducts.length === 0) {
+        return res.status(404).json({ error: "Inga produkter hittades för denna kategori" });
+      }
+
+      return res.json(fallbackProducts);
+    }
+
+    return res.json(products);
   } catch (error) {
     console.error("Error in getting products by category:", error);
     res.status(500).json({ error: "Internt serverfel" });
