@@ -44,7 +44,8 @@ app.get('/api', (req, res) => {
         "POST /api/products": "Create a new product (Admin only)",
         "PUT /api/products/:id": "Update a product (Admin only)",
         "DELETE /api/products/:id": "Delete a product (Admin only)",
-        "PUT /api/products/:id/stock": "Update product stock (Admin only)"
+        "PUT /api/products/:id/stock": "Update product stock (Admin only)",
+        "GET /api/products/category/:category":"Get products by category ID or name"
       },
       categories: {
         "GET /api/categories": "Get all categories",
