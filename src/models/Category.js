@@ -24,10 +24,19 @@ const categorySchema = new mongoose.Schema({
 
 categorySchema.pre('save', function(next) {
   if (!this.isModified('name') && this.slug) return next();
-  this.slug = this.name
+  
+  // Normalisera unicode-tecken och ta bort diakritiska tecken
+  let slugText = this.name
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/å/gi, 'a')
+    .replace(/ä/gi, 'a')
+    .replace(/ö/gi, 'o')
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/(^-|-$)/g, '');
+  
+  this.slug = slugText;
   next();
 });
 
