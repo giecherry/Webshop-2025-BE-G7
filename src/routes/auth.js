@@ -8,16 +8,20 @@ const router = express.Router();
 // Register
 router.post('/register', async (req, res) => {
   try {
+    const existingUser = await User.findOne({ username: req.body.username });
+    if (existingUser) {
+      return res.status(400).json({ error: 'Användarnamnet är redan upptaget. Välj ett annat.' });
+    }
+
     const user = new User(req.body);
     await user.save();
-    
+
     const token = jwt.sign(
       { id: user._id, isAdmin: user.isAdmin },
       process.env.JWT_SECRET || 'your-secret-key',
-      { expiresIn: '24h' },
-      { refreshToken: true }
+      { expiresIn: '24h' }
     );
-    
+
     res.status(201).json({ user, token });
   } catch (error) {
     res.status(400).json({ error: error.message });
