@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 import bcrypt from "bcryptjs/dist/bcrypt.js";
 import { auth } from "../middleware/auth.js";
+import e from "express";
 
 const router = express.Router();
 
@@ -105,3 +106,5 @@ router.post('/check-username', async (req, res) => {
 
   res.status(200).json({ available: true, message: 'Användarnamnet är tillgängligt.' });
 });
+
+export default router;
