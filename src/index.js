@@ -37,6 +37,7 @@ app.get('/api', (req, res) => {
         "POST /api/auth/register": "Register a new user",
         "POST /api/auth/login": "Login with username and password",
         "GET /api/auth/me": "Check user token admin or user",
+        "GET /api/auth/check-username": "Check if username is available",
       },
       products: {
         "GET /api/products": "Get all products",

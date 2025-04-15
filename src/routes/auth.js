@@ -90,4 +90,18 @@ router.get("/me", auth, (req, res) => {
   }
 });
 
-export default router;
+// Check if username is available
+router.post('/check-username', async (req, res) => {
+  const { username } = req.body; 
+
+  if (!username) {
+    return res.status(400).json({ error: 'Användarnamn krävs.' });
+  }
+
+  const existingUser = await User.findOne({ username });
+  if (existingUser) {
+    return res.status(200).json({ available: false, message: 'Användarnamnet är redan upptaget.' });
+  }
+
+  res.status(200).json({ available: true, message: 'Användarnamnet är tillgängligt.' });
+});
