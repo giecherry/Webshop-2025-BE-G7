@@ -5,10 +5,31 @@ import bcrypt from 'bcryptjs/dist/bcrypt.js';
 
 const router = express.Router();
 
+// Valideringsfunktioner
+function isValidUsername(username) {
+  const regex = /^(?=.{3,16}$)[a-zA-Z0-9_-]+$/;
+  return regex.test(username);
+}
+
+function isValidPassword(password) {
+  return typeof password === 'string' && password.length >= 8;
+}
+
 // Register
 router.post('/register', async (req, res) => {
   try {
-    const user = new User(req.body);
+    const { username, password } = req.body;
+    if (!isValidUsername(username)) {
+      return res.status(400).json({ error: 'Ogiltigt användarnamn. Det måste vara 3-16 tecken långt och bara innehålla bokstäver, siffror, _ eller -' });
+    }
+    if (!isValidPassword(password)) {
+      return res.status(400).json({ error: 'Ogiltigt lösenord. Det måste vara minst 8 tecken långt.' });
+    }
+    const existingUser = await User.findOne({ username });
+    if (existingUser) {
+      return res.status(400).json({ error: 'Användarnamnet är redan i bruk' });
+    }
+    const user = new User({ username, password });
     await user.save();
     
     const token = jwt.sign(
