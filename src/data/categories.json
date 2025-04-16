@@ -1,14 +1,34 @@
 [
   {
-    "name": "Fruits",
-    "description": "Fresh fruits from local and international suppliers"
+    "name": "Frukt & Grönt",
+    "description": "Färska frukter och grönsaker från lokala och internationella leverantörer"
   },
   {
-    "name": "Vegetables",
-    "description": "Fresh vegetables for your daily needs"
+    "name": "Mejeri & Ägg",
+    "description": "Mjölk, ost, yoghurt och färska ägg"
   },
   {
-    "name": "Dairy",
-    "description": "Milk, cheese, and other dairy products"
+    "name": "Kött & Chark",
+    "description": "Färskt kött, charkuterier och färdiglagade kötträtter"
+  },
+  {
+    "name": "Fisk & Skaldjur",
+    "description": "Färsk fisk, skaldjur och delikatesser från havet"
+  },
+  {
+    "name": "Bröd & Bageri",
+    "description": "Nybakat bröd, bullar och andra bageriprodukter"
+  },
+  {
+    "name": "Ekologiskt",
+    "description": "Ekologiska varor producerade med miljön i fokus"
+  },
+  {
+    "name": "Kaffe & Te",
+    "description": "Ett urval av kaffe, te och tillbehör"
+  },
+  {
+    "name": "Snacks & Godis",
+    "description": "Chips, nötter, choklad och andra godsaker"
   }
-] 
+]
