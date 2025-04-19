@@ -358,4 +358,45 @@ router.put('/products/:id/stock', auth, async (req, res) => {
 });
 
 
+//Search products by name or description
+router.get('/products/search', async (req, res) => {
+  try {
+    const { q } = req.query; 
+
+    if (!q) {
+      return res.status(400).json({ error: 'Query missing' });
+    }
+
+    const products = await Product.aggregate([
+      {
+        $match: {
+          $or: [
+            { name: { $regex: q, $options: 'i' } }, 
+            { description: { $regex: q, $options: 'i' } }, 
+          ],
+        },
+      },
+      {
+        $project: {
+          name: 1,
+          price: 1,
+          description: 1,
+          stock: 1,
+          imageUrl: 1,
+        },
+      },
+    ]);
+
+    if (products.length === 0) {
+      return res.status(404).json({ message: 'Inga produkter matchade din sökning.' });
+    }
+
+    res.json(products); 
+    console.log('Search result fetched successfully:');
+  } catch (error) {
+    console.error('Fel vid sökning efter produkter:', error);
+    res.status(500).json({ error: 'Ett fel uppstod vid sökning efter produkter.' });
+  }
+});
+
 export default router;
