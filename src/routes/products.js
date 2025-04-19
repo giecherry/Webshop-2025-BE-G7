@@ -31,58 +31,7 @@ router.get("/products", async (req, res) => {
   }
 });
 
-// Get products by category name or category ID
-router.get("/products/category/:category", async (req, res) => {
-  const { category } = req.params;
 
-  try {
-    let categoryQuery;
-
-    if (category.match(/^[0-9a-fA-F]{24}$/)) {
-      categoryQuery = await Category.findById(category);
-    } else {
-      categoryQuery = await Category.findOne({ name: category });
-    }
-
-    if (!categoryQuery) {
-      return res.status(404).json({ error: `Kategori '${category}' hittades inte` });
-    }
-    const products = await Product.find({ category: categoryQuery._id }).populate('category');
-
-    if (!products || products.length === 0) {
-     
-      const fallbackProducts = productsJSON.filter(p => p.category === categoryQuery._id.toString());
-
-      if (fallbackProducts.length === 0) {
-        return res.status(404).json({ error: "Inga produkter hittades för denna kategori" });
-      }
-
-      return res.json(fallbackProducts);
-    }
-
-    return res.json(products);
-  } catch (error) {
-    console.error("Error in getting products by category:", error);
-    res.status(500).json({ error: "Internt serverfel" });
-  }
-});
-// Get single product
-router.get("/products/:id", async (req, res) => {
-  const { id } = req.params;
-  try {
-    let product = await Product.findById(id);
-    if (!product) {
-      product = productsJSON.find((product) => product._id === id);
-      if (!product) {
-        return res.status(404).json({ error: "Produkt hittades inte" });
-      }
-    }
-    return res.json(product);
-  } catch (error) {
-    console.error("Error in getting product by ID:", error);
-    res.status(500).json({ error: error.message });
-  }
-});
 
 
 // Create product (admin only)
@@ -358,4 +307,97 @@ router.put('/products/:id/stock', auth, async (req, res) => {
 });
 
 
+//Search products by name or description
+router.get('/products/search', async (req, res) => {
+  try {
+    const { q } = req.query; 
+
+    if (!q) {
+      return res.status(400).json({ error: 'Query missing' });
+    }
+
+    const products = await Product.aggregate([
+      {
+        $match: {
+          $or: [
+            { name: { $regex: q, $options: 'i' } }, 
+            { description: { $regex: q, $options: 'i' } }, 
+          ],
+        },
+      },
+      {
+        $project: {
+          name: 1,
+          price: 1,
+          description: 1,
+          stock: 1,
+          imageUrl: 1,
+        },
+      },
+    ]);
+
+    if (products.length === 0) {
+      return res.status(404).json({ message: 'Inga produkter matchade din sökning.' });
+    }
+
+    res.json(products); 
+    console.log('Search result fetched successfully:');
+  } catch (error) {
+    console.error('Fel vid sökning efter produkter:', error);
+    res.status(500).json({ error: 'Ett fel uppstod vid sökning efter produkter.' });
+  }
+});
+// Get products by category name or category ID
+router.get("/products/category/:category", async (req, res) => {
+  const { category } = req.params;
+
+  try {
+    let categoryQuery;
+
+    if (category.match(/^[0-9a-fA-F]{24}$/)) {
+      categoryQuery = await Category.findById(category);
+    } else {
+      categoryQuery = await Category.findOne({ name: category });
+    }
+
+    if (!categoryQuery) {
+      return res.status(404).json({ error: `Kategori '${category}' hittades inte` });
+    }
+    const products = await Product.find({ category: categoryQuery._id }).populate('category');
+
+    if (!products || products.length === 0) {
+     
+      const fallbackProducts = productsJSON.filter(p => p.category === categoryQuery._id.toString());
+
+      if (fallbackProducts.length === 0) {
+        return res.status(404).json({ error: "Inga produkter hittades för denna kategori" });
+      }
+
+      return res.json(fallbackProducts);
+    }
+
+    return res.json(products);
+  } catch (error) {
+    console.error("Error in getting products by category:", error);
+    res.status(500).json({ error: "Internt serverfel" });
+  }
+});
+
+// Get single product
+router.get("/products/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    let product = await Product.findById(id);
+    if (!product) {
+      product = productsJSON.find((product) => product._id === id);
+      if (!product) {
+        return res.status(404).json({ error: "Produkt hittades inte" });
+      }
+    }
+    return res.json(product);
+  } catch (error) {
+    console.error("Error in getting product by ID:", error);
+    res.status(500).json({ error: error.message });
+  }
+});
 export default router;
