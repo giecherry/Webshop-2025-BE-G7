@@ -13,6 +13,7 @@ import Product from './models/Product.js';
 import Category from './models/Category.js';
 import User from './models/User.js';
 import Order from './models/Order.js';
+import cartRoutes from './routes/cart.js';
 
 dotenv.config();
 
@@ -66,6 +67,10 @@ app.get('/api', (req, res) => {
         "DELETE /api/data-migration/users/teardown": "Remove all users (Admin only)",
         "POST /api/data-migration/orders/migrate": "Migrate orders from JSON (Admin only)",
         "DELETE /api/data-migration/orders/teardown": "Remove all orders (Admin only)"
+      },
+      cart: {
+        "GET /api/cart": "Get the current user's cart",
+        "POST /api/cart": "Save or update the current user's cart"
       }
     },
     authentication: "Use Bearer token in Authorization header for protected routes"
@@ -77,6 +82,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api', productRoutes);
 app.use('/api', categoryRoutes);
 app.use('/api', orderRoutes);
+app.use('/api', cartRoutes);
 
 // Data Migration Routes
 // Products migration
